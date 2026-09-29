@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MEN'S FIT HUB • Editorial Video-Commerce & Curated Lookbook</title>
+  
+  <!-- OpenGraph Fashion Meta Tags (PRD Section 12) -->
+  <meta property="og:title" content="Men's Fit Hub — Editorial Menswear Video Commerce">
+  <meta property="og:description" content="Transforming Instagram menswear fashion into direct, verified affiliate conversions. SSENSE & Zara Man inspired editorial lookbooks.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80">
+  
+  <!-- Modern Haute Couture Fonts & Stylesheets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/editorial.css">
+  <link rel="stylesheet" href="css/feed.css">
+  <link rel="stylesheet" href="css/wardrobe.css">
+
+  <style>
+    /* Editorial Lookbook Stories Section */
+    .lookbook-section {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 3rem 2rem 6rem 2rem;
+    }
+
+    .editorial-manifesto {
+      border-left: 2px solid var(--text-accent);
+      padding-left: 1.5rem;
+      margin: 2rem 0 3.5rem 0;
+      max-width: 780px;
+    }
+
+    .manifesto-quote {
+      font-family: var(--font-editorial);
+      font-size: 1.5rem;
+      color: var(--text-primary);
+      line-height: 1.4;
+      margin-bottom: 0.75rem;
+    }
+
+    .manifesto-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5rem;
+    }
+
+    .story-card {
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-surface);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .story-img-wrap {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .story-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 600ms var(--ease-spring);
+    }
+
+    .story-card:hover .story-img {
+      transform: scale(1.03);
+    }
+
+    .story-body {
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 850px) {
+      .story-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Editorial Haute Couture Top Navigation (Zero trace of admin in public headers) -->
+  <header class="editorial-nav">
+    <div class="editorial-logo">
+      <span class="editorial-logo-title">MEN'S FIT HUB</span>
+      <span class="editorial-logo-subtitle">VOL. 26 // EDITORIAL FEED</span>
+    </div>
+
+    <nav class="nav-links">
+      <a href="#feed" class="nav-link active" data-view-target="feedView">9:16 FEED</a>
+      <a href="#wardrobe" class="nav-link" data-view-target="wardrobeView">ALL FITS</a>
+      <a href="#lookbook" class="nav-link" data-view-target="lookbookView">LOOKBOOK STORIES</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="nav-btn" onclick="window.switchView('wardrobeView')">
+        <span>ARCHIVE</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <!-- =======================================================
+         VIEW 1: REEL-TO-FIT HOME FEED (PRD Section 6)
+         ======================================================= -->
+    <section class="view-section active" id="feedView">
+      <div class="reel-feed-wrapper">
+        <!-- Ambient Atmospheric Blurred Backdrop -->
+        <div class="feedBackdrop-blur" id="feedBackdropBlur"></div>
+
+        <!-- Desktop Navigation Arrows -->
+        <button class="feed-nav-arrow feed-nav-prev" id="feedPrevBtn" title="Previous Look (Key: ↑ / K)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+        </button>
+
+        <button class="feed-nav-arrow feed-nav-next" id="feedNextBtn" title="Next Look (Key: ↓ / J)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+        <!-- 9:16 Aspect Ratio Centered Viewport Frame -->
+        <div class="reel-viewport-frame">
+          <div class="snap-feed-scroll" id="snapFeedContainer">
+            <!-- Dynamically populated by ReelFeedEngine -->
+          </div>
+
+          <!-- Interactive "Shop This Look" Drawer (Swift 200ms spring-sheet) -->
+          <div class="shop-drawer-overlay" id="shopDrawerOverlay">
+            <div class="shop-drawer-sheet">
+              <div class="drawer-drag-handle"></div>
+              
+              <div class="drawer-header">
+                <div>
+                  <div class="drawer-subtitle" id="drawerReelSubtitle">STYLED PIECES</div>
+                  <h3 class="drawer-title" id="drawerReelTitle">SHOP THIS LOOK</h3>
+                </div>
+                <button class="drawer-close-btn" data-action="close-drawer" title="Close Drawer">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="drawer-items-list" id="drawerItemsList">
+                <!-- Dynamically populated with garment breakdown cards -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         VIEW 2: MASTER WARDROBE CATALOG ("ALL FITS") (PRD Section 7)
+         ======================================================= -->
+    <section class="view-section" id="wardrobeView">
+      <div class="wardrobe-container">
+        <!-- Catalog Header -->
+        <div class="wardrobe-hero">
+          <div class="wardrobe-breadcrumbs">INDEX // MASTER WARDROBE ENCYCLOPEDIA</div>
+          <div class="wardrobe-title-row">
+            <h1 class="wardrobe-main-heading">EVERY FIT EVER STYLED</h1>
+            <span class="wardrobe-count-pill" id="wardrobeTotalCount">CATALOGING ITEMS...</span>
+          </div>
+          <p class="wardrobe-desc">
+            Direct access to every apparel entity curated across our Instagram video reels. 
+            All links route through verified affiliate protocols ensuring direct retail attribution for Amazon, Flipkart, and Myntra.
+          </p>
+        </div>
+
+        <!-- Faceted Taxonomy Filtering -->
+        <div class="taxonomy-filter-wrapper">
+          <!-- Category Chips -->
+          <div class="filter-row">
+            <span class="filter-group-label">CATEGORY</span>
+            <div class="filter-chips" data-filter-group="category">
+              <button class="filter-chip active" data-filter-val="ALL">ALL FITS</button>
+              <button class="filter-chip" data-filter-val="SHIRT">SHIRTS & KNITS</button>
+              <button class="filter-chip" data-filter-val="PANT">TROUSERS & DENIM</button>
+              <button class="filter-chip" data-filter-val="OUTERWEAR">OUTERWEAR</button>
+              <button class="filter-chip" data-filter-val="SHOE">FOOTWEAR</button>
+              <button class="filter-chip" data-filter-val="ACCESSORY">ACCESSORIES</button>
+            </div>
+          </div>
+
+          <!-- Fit Chips -->
+          <div class="filter-row">
+            <span class="filter-group-label">SILHOUETTE</span>
+            <div class="filter-chips" data-filter-group="fit">
+              <button class="filter-chip active" data-filter-val="ALL">ALL SILHOUETTES</button>
+              <button class="filter-chip" data-filter-val="OVERSIZED">OVERSIZED / BOXY</button>
+              <button class="filter-chip" data-filter-val="RELAXED">RELAXED DRAPE</button>
+              <button class="filter-chip" data-filter-val="SLIM">SLIM TAILORED</button>
+            </div>
+          </div>
+
+          <!-- Search & Reset Bar -->
+          <div class="catalog-search-row">
+            <div class="catalog-search-box">
+              <svg class="catalog-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="catalogSearchInput" placeholder="Filter by garment name, brand (Studio Nicholson, Lemaire, COS), or SKU...">
+            </div>
+            <button class="clear-filters-btn" id="clearFiltersBtn">CLEAR ALL</button>
+          </div>
+        </div>
+
+        <!-- 4-Column Product Grid -->
+        <div class="editorial-grid" id="wardrobeGrid">
+          <!-- Dynamically populated by WardrobeCatalog -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         VIEW 3: EDITORIAL STORIES & LOOKBOOK
+         ======================================================= -->
+    <section class="view-section" id="lookbookView">
+      <div class="lookbook-section">
+        <span class="tag-label">HAUTE COUTURE EDITORIAL ARCHIVE</span>
+        <h1 class="wardrobe-main-heading" style="margin-top: 0.5rem;">CURATED CAPSULES</h1>
+        
+        <div class="editorial-manifesto">
+          <p class="manifesto-quote">"True style is not the accumulation of brand marks, but the balance of silhouette, weight, and timeless proportion."</p>
+          <p class="manifesto-sub">
+            Men's Fit Hub bridges social media styling aesthetics with immediate retail commerce. 
+            Rejecting disposable micro-trends in favor of heavyweight cottons, structured tailoring, and architectural drape.
+          </p>
+        </div>
+
+        <div class="story-grid">
+          <!-- Story 1 -->
+          <article class="story-card">
+            <div class="story-img-wrap">
+              <img class="story-img" src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1000&q=80" alt="Tokyo Boxy Tailoring">
+            </div>
+            <div class="story-body">
+              <span class="tag-label" style="color: var(--accent-gold);">LOOKBOOK 01 // TOKYO TAILORING</span>
+              <h2 style="font-family: var(--font-display); font-size: 1.4rem;">THE ARCHITECTURAL PROPORTION</h2>
+              <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+                Explore the juxtaposition of relaxed double-breasted wool suiting paired with 14oz rigid Japanese selvedge denim. Grounded with heavy welted footwear.
+              </p>
+              <div style="margin-top: 0.5rem;">
+                <button class="btn-editorial-primary" onclick="window.switchView('feedView');">WATCH IN 9:16 FEED</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Story 2 -->
+          <article class="story-card">
+            <div class="story-img-wrap">
+              <img class="story-img" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1000&q=80" alt="Minimalist Linen">
+            </div>
+            <div class="story-body">
+              <span class="tag-label" style="color: var(--accent-gold);">LOOKBOOK 02 // MEDITERRANEAN DRAPE</span>
+              <h2 style="font-family: var(--font-display); font-size: 1.4rem;">BREATHABLE MONOCHROME</h2>
+              <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+                Summer dressing defined through density and texture: unbleached flax camp-collar shirts falling seamlessly over high-rise pleated olive trousers.
+              </p>
+              <div style="margin-top: 0.5rem;">
+                <button class="btn-editorial-primary" onclick="window.switchView('wardrobeView');">EXPLORE PIECES</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =======================================================
+       "SEEN IN REEL" MODAL / MINI-PLAYER POPUP (PRD Section 7)
+       ======================================================= -->
+  <div class="editorial-modal-backdrop" id="seenReelModal">
+    <div class="seen-reel-modal-content" id="seenReelModalContent">
+      <!-- Populated dynamically by wardrobe.js -->
+    </div>
+  </div>
+
+  <!-- Editorial Toast Feedback -->
+  <div class="editorial-toast" id="editorialToast">
+    <span class="editorial-toast-dot"></span>
+    <span id="editorialToastMessage">SYSTEM NOTIFICATION</span>
+  </div>
+
+  <!-- Load Database and Storefront Scripts -->
+  <script src="../../packages/database/db.js"></script>
+  <script src="js/feed.js"></script>
+  <script src="js/wardrobe.js"></script>
+  <script src="js/affiliate-client.js"></script>
+
+  <script>
+    // Global Toast Notification Helper
+    window.showEditorialToast = function(message) {
+      const toast = document.getElementById('editorialToast');
+      const msgEl = document.getElementById('editorialToastMessage');
+      if (!toast || !msgEl) return;
+      msgEl.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2800);
+    };
+
+    // Navigation and View Switching Engine
+    window.switchView = function(viewId) {
+      document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+      const target = document.getElementById(viewId);
+      if (target) {
+        target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Update Nav active classes
+      document.querySelectorAll('.nav-link').forEach(link => {
+        if (link.dataset.viewTarget === viewId) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+
+      // Pause feed videos when navigating away from feed
+      if (viewId !== 'feedView' && window.FeedInstance) {
+        window.FeedInstance.videoElements.forEach(v => v.pause());
+      }
+    };
+
+    // Initialize Components on DOM Load
+    document.addEventListener('DOMContentLoaded', () => {
+      // Setup Nav link clicks
+      document.querySelectorAll('[data-view-target]').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.switchView(link.dataset.viewTarget);
+        });
+      });
+
+      // Initialize Feed Engine
+      window.FeedInstance = new ReelFeedEngine();
+
+      // Initialize Wardrobe Catalog
+      window.WardrobeInstance = new WardrobeCatalog();
+
+      // Initialize Affiliate Redirection Client
+      window.AffiliateClient = new AffiliateRedirectClient();
+
+      // Handle hash navigation
+      if (window.location.hash === '#wardrobe') {
+        window.switchView('wardrobeView');
+      } else if (window.location.hash === '#lookbook') {
+        window.switchView('lookbookView');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MEN'S FIT HUB • Creator Admin Panel</title>
+  
+  <link rel="stylesheet" href="../storefront/css/editorial.css">
+  
+  <style>
+    body {
+      background: #09090B;
+      color: #FFFFFF;
+      font-family: var(--font-sans);
+      margin: 0;
+      padding-bottom: 5rem;
+    }
+
+    .admin-top-bar {
+      background: #111115;
+      border-bottom: 1px solid #27272A;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .admin-brand h1 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      margin: 0;
+    }
+
+    .sync-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: #10B981;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+    }
+
+    .sync-dot {
+      width: 6px;
+      height: 6px;
+      background: #10B981;
+      border-radius: 50%;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    .admin-nav {
+      display: flex;
+      gap: 0.5rem;
+      background: #16161B;
+      padding: 0.3rem;
+      border-radius: 8px;
+      border: 1px solid #27272A;
+    }
+
+    .admin-nav-btn {
+      padding: 0.5rem 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #A1A1AA;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: all 150ms ease;
+    }
+
+    .admin-nav-btn:hover {
+      color: #FFFFFF;
+    }
+
+    .admin-nav-btn.active {
+      background: #FFFFFF;
+      color: #000000;
+      font-weight: 700;
+    }
+
+    .view-store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: transparent;
+      border: 1px solid #3F3F46;
+      color: #FFFFFF;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 140ms ease;
+    }
+
+    .view-store-btn:hover {
+      background: #27272A;
+      border-color: #FFFFFF;
+    }
+
+    .admin-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 200ms ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .admin-panel-card {
+      background: #121216;
+      border: 1px solid #27272A;
+      border-radius: 10px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .panel-header {
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #222228;
+      padding-bottom: 1rem;
+    }
+
+    .panel-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .panel-desc {
+      font-size: 13px;
+      color: #A1A1AA;
+      margin-top: 0.35rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    .form-full {
+      grid-column: 1 / -1;
+    }
+
+    .simple-label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #D4D4D8;
+      margin-bottom: 0.4rem;
+    }
+
+    .simple-input, .simple-select, .simple-textarea {
+      width: 100%;
+      background: #18181E;
+      border: 1px solid #2E2E36;
+      border-radius: 6px;
+      color: #FFFFFF;
+      font-family: inherit;
+      font-size: 14px;
+      padding: 0.75rem 1rem;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 150ms ease;
+    }
+
+    .simple-input:focus, .simple-select:focus, .simple-textarea:focus {
+      border-color: #FFFFFF;
+    }
+
+    .input-hint {
+      font-size: 11px;
+      color: #71717A;
+      margin-top: 0.35rem;
+    }
+
+    .clothes-picker-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      max-height: 280px;
+      overflow-y: auto;
+      border: 1px solid #27272A;
+      border-radius: 6px;
+      padding: 0.75rem;
+      background: #16161B;
+    }
+
+    .picker-box {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem;
+      background: #1B1B22;
+      border: 1px solid #2E2E36;
+      border-radius: 6px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 120ms ease;
+    }
+
+    .picker-box:hover {
+      border-color: #52525B;
+    }
+
+    .picker-box.checked {
+      border-color: #10B981;
+      background: rgba(16, 185, 129, 0.08);
+    }
+
+    .picker-img {
+      width: 40px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .btn-submit-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #FFFFFF;
+      color: #000000;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.85rem 2rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      transition: all 150ms ease;
+    }
+
+    .btn-submit-main:hover {
+      background: #E4E4E7;
+      transform: translateY(-1px);
+    }
+
+    .items-table-card {
+      background: #121216;
+      border: 1px solid #27272A;
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .product-manage-card {
+      background: #18181E;
+      border: 1px solid #27272A;
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .product-manage-img {
+      width: 74px;
+      height: 98px;
+      object-fit: cover;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .product-manage-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .buy-link-input-row {
+      margin-top: 0.5rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-update-link {
+      background: #27272A;
+      color: #FFFFFF;
+      border: 1px solid #3F3F46;
+      border-radius: 4px;
+      padding: 0.35rem 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-update-link:hover {
+      background: #FFFFFF;
+      color: #000000;
+    }
+
+    .btn-delete-simple {
+      background: transparent;
+      color: #EF4444;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 4px;
+      padding: 0.25rem 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      cursor: pointer;
+    }
+
+    .btn-delete-simple:hover {
+      background: #EF4444;
+      color: #FFFFFF;
+    }
+
+    .save-alert {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #10B981;
+      color: #000000;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 0.85rem 1.5rem;
+      border-radius: 6px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 200ms ease;
+      z-index: 1000;
+    }
+
+    .save-alert.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 850px) {
+      .form-grid, .items-grid, .clothes-picker-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="admin-top-bar">
+    <div class="admin-brand">
+      <h1>MEN'S FIT HUB • CREATOR STUDIO</h1>
+      <div class="sync-badge">
+        <span class="sync-dot"></span>
+        <span>REAL-TIME STOREFRONT SYNC: ACTIVE</span>
+      </div>
+    </div>
+
+    <nav class="admin-nav">
+      <button class="admin-nav-btn active" onclick="switchAdminTab('tabReels')">🎬 1. REELS (VIDEOS)</button>
+      <button class="admin-nav-btn" onclick="switchAdminTab('tabClothes')">👕 2. CLOTHES & BUY LINKS</button>
+      <button class="admin-nav-btn" onclick="switchAdminTab('tabStats')">📊 3. STATS & CLICKS</button>
+    </nav>
+
+    <a href="../storefront/index.html" target="_blank" class="view-store-btn">
+      <span>OPEN CUSTOMER WEBSITE</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="7" y1="17" x2="17" y2="7"></line>
+        <polyline points="7 7 17 7 17 17"></polyline>
+      </svg>
+    </a>
+  </header>
+
+  <main class="admin-container">
+
+    <!-- TAB 1: REELS -->
+    <section class="tab-content active" id="tabReels">
+      <div class="admin-panel-card">
+        <div class="panel-header">
+          <h2 class="panel-title">ADD A NEW 9:16 REEL TO THE FEED</h2>
+          <p class="panel-desc">Paste your video link, give it a title, and select which clothes from your wardrobe are featured in this reel.</p>
+        </div>
+
+        <form id="reelUploadForm" onsubmit="handleReelSubmit(event)">
+          <div class="form-grid">
+            <div>
+              <label class="simple-label">REEL TITLE</label>
+              <input type="text" class="simple-input" id="newReelTitle" placeholder="e.g. Minimalist Linen Uniform" required>
+            </div>
+
+            <div>
+              <label class="simple-label">TAGS (COMMA SEPARATED)</label>
+              <input type="text" class="simple-input" id="newReelTags" placeholder="linen, summer, streetwear" value="minimalism, streetwear">
+            </div>
+
+            <div>
+              <label class="simple-label">9:16 VIDEO LINK (MP4 / STREAM URL)</label>
+              <input type="text" class="simple-input" id="newReelVideo" placeholder="https://commondatastorage.googleapis.com/.../video.mp4" value="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" required>
+            </div>
+
+            <div>
+              <label class="simple-label">POSTER / COVER IMAGE LINK</label>
+              <input type="text" class="simple-input" id="newReelPoster" placeholder="https://images.unsplash.com/..." value="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80">
+            </div>
+
+            <div class="form-full">
+              <label class="simple-label">STYLING NOTES / CAPTION</label>
+              <textarea class="simple-textarea" id="newReelCaption" rows="2" placeholder="Write advice on how to style this outfit..."></textarea>
+            </div>
+
+            <div class="form-full">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                <label class="simple-label" style="margin: 0;">TAG CLOTHES FEATURED IN THIS REEL</label>
+                <span id="taggedClothesCount" style="font-family: var(--font-mono); font-size: 11px; color: #10B981;">0 items selected</span>
+              </div>
+              <div class="clothes-picker-grid" id="reelClothesSelector"></div>
+              <div class="input-hint">Click on any garment to tag/untag it. These will show inside the "Shop This Look" drawer on the customer website.</div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit-main">
+            🚀 PUBLISH REEL TO WEBSITE
+          </button>
+        </form>
+      </div>
+
+      <div class="items-table-card">
+        <h3 style="font-family: var(--font-display); font-size: 1.15rem; margin-top: 0; margin-bottom: 1rem;">ALL CURRENT PUBLISHED REELS</h3>
+        <div id="existingReelsList" style="display: flex; flex-direction: column; gap: 0.75rem;"></div>
+      </div>
+    </section>
+
+    <!-- TAB 2: CLOTHES & BUY LINKS -->
+    <section class="tab-content" id="tabClothes">
+      <div class="admin-panel-card">
+        <div class="panel-header">
+          <h2 class="panel-title">ADD A NEW CLOTHING ITEM & BUY LINK</h2>
+          <p class="panel-desc">Add garments to your master wardrobe. Whatever Buy Link you put here will open directly when a customer clicks "BUY".</p>
+        </div>
+
+        <form id="productUploadForm" onsubmit="handleProductSubmit(event)">
+          <div class="form-grid">
+            <div>
+              <label class="simple-label">CLOTHING NAME</label>
+              <input type="text" class="simple-input" id="newProdName" placeholder="e.g. Oversized Camp-Collar Linen Shirt" required>
+            </div>
+
+            <div>
+              <label class="simple-label">BRAND NAME</label>
+              <input type="text" class="simple-input" id="newProdBrand" placeholder="e.g. Zara Man / Studio Nicholson" required>
+            </div>
+
+            <div>
+              <label class="simple-label">CATEGORY</label>
+              <select class="simple-select" id="newProdCategory">
+                <option value="SHIRT">SHIRT / TOP</option>
+                <option value="PANT">PANT / DENIM</option>
+                <option value="OUTERWEAR">OUTERWEAR / JACKET</option>
+                <option value="SHOE">FOOTWEAR</option>
+                <option value="ACCESSORY">ACCESSORY</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="simple-label">PRICE (INR ₹)</label>
+              <input type="number" class="simple-input" id="newProdPrice" value="3499" required>
+            </div>
+
+            <div class="form-full">
+              <label class="simple-label" style="color: #38BDF8;">DIRECT BUY LINK (OPENED WHEN CUSTOMER CLICKS "BUY")</label>
+              <input type="url" class="simple-input" id="newProdBuyLink" placeholder="https://www.amazon.in/dp/... or https://www.flipkart.com/..." value="https://www.amazon.in/dp/B09XYZ123?tag=mensfithub-21" required style="border-color: #38BDF8;">
+              <div class="input-hint">Paste your Amazon, Flipkart, Myntra, or store link here. When customer clicks "BUY" on the website, this EXACT link will open.</div>
+            </div>
+
+            <div class="form-full">
+              <label class="simple-label">IMAGE PHOTO URL (3:4 PORTRAIT)</label>
+              <input type="text" class="simple-input" id="newProdImage" placeholder="https://images.unsplash.com/..." value="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" required>
+            </div>
+
+            <div class="form-full">
+              <label class="simple-label">SIZING / FIT ADVICE NOTE (OPTIONAL)</label>
+              <input type="text" class="simple-input" id="newProdFitAdvice" placeholder="e.g. Boxy drop shoulder — take your true size.">
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit-main">
+            💾 SAVE CLOTHING ITEM
+          </button>
+        </form>
+      </div>
+
+      <div class="items-table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h3 style="font-family: var(--font-display); font-size: 1.15rem; margin: 0;">ALL WARDROBE ITEMS & BUY LINKS</h3>
+          <span style="font-family: var(--font-mono); font-size: 11px; color: #A1A1AA;" id="totalProductsCount">Loading items...</span>
+        </div>
+
+        <div class="items-grid" id="existingProductsGrid"></div>
+      </div>
+    </section>
+
+    <!-- TAB 3: STATS -->
+    <section class="tab-content" id="tabStats">
+      <div class="admin-panel-card">
+        <div class="panel-header">
+          <h2 class="panel-title">OVERVIEW & OUTBOUND BUY CLICKS</h2>
+          <p class="panel-desc">Real-time stats showing customer engagement and clicks on your buy buttons.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+          <div style="background: #18181E; padding: 1.5rem; border-radius: 8px; border: 1px solid #27272A;">
+            <div style="font-family: var(--font-mono); font-size: 11px; color: #A1A1AA;">TOTAL REEL VIEWS</div>
+            <div style="font-family: var(--font-display); font-size: 2rem; font-weight: 800; margin-top: 0.5rem;" id="statTotalViews">98,140</div>
+          </div>
+
+          <div style="background: #18181E; padding: 1.5rem; border-radius: 8px; border: 1px solid #27272A;">
+            <div style="font-family: var(--font-mono); font-size: 11px; color: #10B981;">TOTAL BUY BUTTON CLICKS</div>
+            <div style="font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: #10B981; margin-top: 0.5rem;" id="statTotalClicks">14</div>
+          </div>
+
+          <div style="background: #18181E; padding: 1.5rem; border-radius: 8px; border: 1px solid #27272A;">
+            <div style="font-family: var(--font-mono); font-size: 11px; color: #38BDF8;">TOTAL ACTIVE FITS</div>
+            <div style="font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: #38BDF8; margin-top: 0.5rem;" id="statTotalFits">10</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem;">
+          <h4 style="font-family: var(--font-display); margin-bottom: 0.75rem;">TOP CLICKED FITS</h4>
+          <div id="topClickedFitsList" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="save-alert" id="saveAlert">
+    CHANGES SAVED & SYNCED TO CUSTOMER SITE!
+  </div>
+
+  <script src="../../packages/database/db.js"></script>
+
+  <script>
+    let selectedGarmentIds = new Set();
+
+    function switchAdminTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
+      
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+
+      const activeBtn = Array.from(document.querySelectorAll('.admin-nav-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+      if (activeBtn) activeBtn.classList.add('active');
+
+      if (tabId === 'tabStats') loadStats();
+    }
+
+    function showNotification(msg) {
+      const el = document.getElementById('saveAlert');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2200);
+    }
+
+    function renderReelGarmentsSelector() {
+      const container = document.getElementById('reelClothesSelector');
+      if (!container || !window.MFH_DATABASE) return;
+      container.innerHTML = '';
+
+      const products = window.MFH_DATABASE.products;
+      products.forEach(p => {
+        const box = document.createElement('div');
+        box.className = `picker-box ${selectedGarmentIds.has(p.id) ? 'checked' : ''}`;
+        box.innerHTML = `
+          <img src="${p.primaryImage}" class="picker-img" alt="${p.name}">
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-weight: 600; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.name}</div>
+            <div style="font-family: var(--font-mono); font-size: 9px; color: #A1A1AA;">${p.brand} • ₹${p.priceEstimate}</div>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 12px; color: ${selectedGarmentIds.has(p.id) ? '#10B981' : '#52525B'}; font-weight: 700;">
+            ${selectedGarmentIds.has(p.id) ? '✓' : '+'}
+          </div>
+        `;
+
+        box.onclick = () => {
+          if (selectedGarmentIds.has(p.id)) {
+            selectedGarmentIds.delete(p.id);
+          } else {
+            selectedGarmentIds.add(p.id);
+          }
+          renderReelGarmentsSelector();
+          document.getElementById('taggedClothesCount').textContent = `${selectedGarmentIds.size} items selected`;
+        };
+
+        container.appendChild(box);
+      });
+    }
+
+    function renderExistingReels() {
+      const container = document.getElementById('existingReelsList');
+      if (!container || !window.MFH_DATABASE) return;
+      container.innerHTML = '';
+
+      const reels = window.MFH_DATABASE.getAllReels();
+      reels.forEach(r => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 0.85rem; background: #18181E; border: 1px solid #27272A; border-radius: 6px;';
+        row.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <img src="${r.posterUrl}" style="width: 44px; height: 58px; object-fit: cover; border-radius: 4px;" alt="${r.title}">
+            <div>
+              <div style="font-weight: 700; font-size: 13px;">${r.title}</div>
+              <div style="font-family: var(--font-mono); font-size: 10px; color: #A1A1AA; margin-top: 2px;">
+                ${r.itemIds ? r.itemIds.length : 0} Clothes Tagged • ${(r.tags || []).join(', ')}
+              </div>
+            </div>
+          </div>
+          <button class="btn-delete-simple" onclick="deleteReel('${r.id}')">DELETE REEL</button>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function deleteReel(id) {
+      if (confirm('Delete this reel from the customer storefront?')) {
+        window.MFH_DATABASE.deleteReel(id);
+        renderExistingReels();
+        showNotification('REEL DELETED & SYNCED TO WEBSITE!');
+      }
+    }
+
+    function handleReelSubmit(e) {
+      e.preventDefault();
+      const title = document.getElementById('newReelTitle').value.trim();
+      const videoUrl = document.getElementById('newReelVideo').value.trim();
+      const posterUrl = document.getElementById('newReelPoster').value.trim();
+      const caption = document.getElementById('newReelCaption').value.trim();
+      const tags = document.getElementById('newReelTags').value.trim();
+
+      if (!title || !videoUrl) return;
+
+      window.MFH_DATABASE.createReel({
+        title,
+        videoUrl,
+        posterUrl,
+        caption,
+        tags,
+        isPublished: true,
+        itemIds: Array.from(selectedGarmentIds)
+      });
+
+      document.getElementById('newReelTitle').value = '';
+      selectedGarmentIds.clear();
+      renderReelGarmentsSelector();
+      renderExistingReels();
+      document.getElementById('taggedClothesCount').textContent = '0 items selected';
+
+      showNotification('REEL PUBLISHED! VISIBLE ON STOREFRONT NOW.');
+    }
+
+    function renderExistingProducts() {
+      const container = document.getElementById('existingProductsGrid');
+      const totalCount = document.getElementById('totalProductsCount');
+      if (!container || !window.MFH_DATABASE) return;
+      container.innerHTML = '';
+
+      const products = window.MFH_DATABASE.products;
+      if (totalCount) totalCount.textContent = `${products.length} Items Active`;
+
+      products.forEach(p => {
+        const currentLink = (p.affiliateLinks && p.affiliateLinks[0]) ? (p.affiliateLinks[0].affiliateUrl || p.affiliateLinks[0].rawUrl) : '';
+
+        const card = document.createElement('div');
+        card.className = 'product-manage-card';
+        card.innerHTML = `
+          <img src="${p.primaryImage}" class="product-manage-img" alt="${p.name}">
+          <div class="product-manage-info">
+            <div>
+              <div style="display: flex; justify-content: space-between;">
+                <div style="font-family: var(--font-mono); font-size: 10px; color: #A1A1AA;">${p.brand} • ${p.category}</div>
+                <button class="btn-delete-simple" onclick="deleteProduct('${p.id}')">DELETE</button>
+              </div>
+              <div style="font-weight: 700; font-size: 12px; margin-top: 2px;">${p.name}</div>
+              <div style="font-family: var(--font-mono); font-size: 11px; color: #10B981; font-weight: 700; margin-top: 2px;">₹ ${Number(p.priceEstimate).toLocaleString('en-IN')}</div>
+            </div>
+
+            <div>
+              <label style="font-family: var(--font-mono); font-size: 9px; color: #71717A; text-transform: uppercase;">Direct Buy Link:</label>
+              <div class="buy-link-input-row">
+                <input type="text" class="simple-input" style="font-size: 11px; padding: 0.35rem 0.5rem;" value="${currentLink}" id="link_input_${p.id}">
+                <button class="btn-update-link" onclick="updateBuyLink('${p.id}')">SAVE LINK</button>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function updateBuyLink(id) {
+      const input = document.getElementById(`link_input_${id}`);
+      if (!input) return;
+      const newLink = input.value.trim();
+
+      window.MFH_DATABASE.updateProduct(id, { buyLink: newLink });
+      showNotification('BUY LINK UPDATED! STOREFRONT SYNCED.');
+    }
+
+    function deleteProduct(id) {
+      if (confirm('Delete this clothing item?')) {
+        window.MFH_DATABASE.deleteProduct(id);
+        renderExistingProducts();
+        renderReelGarmentsSelector();
+        showNotification('ITEM DELETED!');
+      }
+    }
+
+    function handleProductSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('newProdName').value.trim();
+      const brand = document.getElementById('newProdBrand').value.trim();
+      const category = document.getElementById('newProdCategory').value;
+      const price = document.getElementById('newProdPrice').value;
+      const buyLink = document.getElementById('newProdBuyLink').value.trim();
+      const primaryImage = document.getElementById('newProdImage').value.trim();
+      const fitAdvice = document.getElementById('newProdFitAdvice').value.trim();
+
+      if (!name || !brand || !buyLink || !primaryImage) return;
+
+      window.MFH_DATABASE.createProduct({
+        name,
+        brand,
+        category,
+        priceEstimate: parseFloat(price) || 2999,
+        buyLink,
+        primaryImage,
+        fitAdvice
+      });
+
+      document.getElementById('newProdName').value = '';
+      document.getElementById('newProdBrand').value = '';
+
+      renderExistingProducts();
+      renderReelGarmentsSelector();
+      showNotification('CLOTHING ITEM SAVED & SYNCED TO WEBSITE!');
+    }
+
+    function loadStats() {
+      if (!window.MFH_DATABASE) return;
+      const data = window.MFH_DATABASE.getAnalytics();
+      
+      document.getElementById('statTotalViews').textContent = Number(data.totalViews).toLocaleString();
+      document.getElementById('statTotalClicks').textContent = Number(data.totalClicks).toLocaleString();
+      document.getElementById('statTotalFits').textContent = window.MFH_DATABASE.products.length;
+
+      const topList = document.getElementById('topClickedFitsList');
+      if (topList) {
+        topList.innerHTML = '';
+        data.topFits.forEach((fit, idx) => {
+          const row = document.createElement('div');
+          row.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 1rem; background: #141419; border: 1px solid #27272A; border-radius: 6px; font-family: var(--font-mono); font-size: 11px;';
+          row.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <span style="font-weight: 800; color: #71717A;">#${idx + 1}</span>
+              <img src="${fit.image}" style="width: 28px; height: 36px; object-fit: cover; border-radius: 2px;">
+              <span style="font-weight: 600;">${fit.name}</span>
+            </div>
+            <span style="color: #10B981; font-weight: 700;">${fit.clicks} CLICKS</span>
+          `;
+          topList.appendChild(row);
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderReelGarmentsSelector();
+      renderExistingReels();
+      renderExistingProducts();
+    });
+  </script>
+</body>
+</html>
